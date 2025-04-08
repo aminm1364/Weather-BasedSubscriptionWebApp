@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WSWA.Core.Data;
 using WSWA.Core.Models;
+using WSWA.Core.Services;
 
 namespace WSWA.Core.Controllers
 {
@@ -10,10 +11,12 @@ namespace WSWA.Core.Controllers
     public class SubscriptionController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly WeatherService _weatherService;
 
-        public SubscriptionController(AppDbContext context)
+        public SubscriptionController(AppDbContext context, WeatherService weatherService)
         {
             _context = context;
+            _weatherService = weatherService;
         }
 
         [HttpPost]
@@ -49,7 +52,16 @@ namespace WSWA.Core.Controllers
             if (subscription == null)
                 return NotFound("Subscription not found. Please sign up first.");
 
-            return Ok(new { message = "Login successful", location = $"{subscription.City}, {subscription.Country}" });
+            var weather = await _weatherService.GetWeatherAsync(subscription.City, subscription.Country);
+            if (weather == null)
+                return StatusCode(503, "Unable to fetch weather data. Please try again later.");
+
+            return Ok(new
+            {
+                message = "Login successful",
+                subscription = subscription,
+                weather
+            });
         }
     }
 }
