@@ -1,4 +1,29 @@
+# Core
 .DS_Store
 WSWA.Core/bin/
 WSWA.Core/obj/
 WSWA.Core/appsettings.Development.json
+
+# Logs
+WSWA.Client/WSWA.Client/logs
+WSWA.Client/*.log
+WSWA.Client/npm-debug.log*
+WSWA.Client/yarn-debug.log*
+WSWA.Client/yarn-error.log*
+WSWA.Client/pnpm-debug.log*
+WSWA.Client/lerna-debug.log*
+
+WSWA.Client/node_modules
+WSWA.Client/dist
+WSWA.Client/dist-ssr
+WSWA.Client/*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
