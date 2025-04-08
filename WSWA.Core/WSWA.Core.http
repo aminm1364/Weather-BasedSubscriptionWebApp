@@ -1,0 +1,6 @@
+@WSWA.Core_HostAddress = http://localhost:5160
+
+GET {{WSWA.Core_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
