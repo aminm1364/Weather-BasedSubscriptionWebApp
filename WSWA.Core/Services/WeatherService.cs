@@ -14,7 +14,9 @@ namespace WSWA.Core.Services
         public WeatherService(HttpClient httpClient, IConfiguration config)
         {
             _httpClient = httpClient;
-            _apiKey = config["OpenWeather:ApiKey"] ?? throw new ArgumentNullException("Missing API key");
+            _apiKey = Environment.GetEnvironmentVariable("OPENWEATHER_API_KEY")
+                        ?? config["OpenWeather:ApiKey"]
+                        ?? throw new ArgumentNullException("Missing API key");
             _baseUrl = config["OpenWeather:BaseUrl"] ?? "https://api.openweathermap.org/data/2.5/weather";
         }
 

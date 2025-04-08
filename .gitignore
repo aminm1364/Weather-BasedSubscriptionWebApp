@@ -1,3 +1,4 @@
 .DS_Store
 WSWA.Core/bin/
 WSWA.Core/obj/
+WSWA.Core/appsettings.Development.json
