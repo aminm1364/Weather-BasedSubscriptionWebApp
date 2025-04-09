@@ -13,11 +13,17 @@ export default function Register() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
     const res = await registerUser(form);
+    
     if (res?.email) {
       navigate('/');
     } else {
-      setError(res || 'Something went wrong.');
+      
+      const message = typeof res === 'object' && res?.message
+        ? res.message
+        : 'Registration failed. This email may already be subscribed.';
+      setError(message);
     }
   };
 

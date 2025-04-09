@@ -6,7 +6,8 @@ export async function registerUser(data: any) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
-  return res.json();
+
+  return returnValue(res);
 }
 
 export async function loginUser(email: string) {
@@ -16,6 +17,15 @@ export async function loginUser(email: string) {
       body: JSON.stringify(email),
     });
   
+    return returnValue(res);
+  }
+
+  export async function checkUser(email: string) {
+    const res = await fetch(`${baseUrl}/subscription/${email}`);
+    return res.json();
+  }
+
+  export async function returnValue(res: Response) {
     const contentType = res.headers.get("content-type");
   
     if (res.ok) {
@@ -28,9 +38,4 @@ export async function loginUser(email: string) {
         : await res.text();
       return { message: error };
     }
-  }
-
-  export async function checkUser(email: string) {
-    const res = await fetch(`${baseUrl}/subscription/${email}`);
-    return res.json();
   }
