@@ -29,3 +29,8 @@ export async function loginUser(email: string) {
       return { message: error };
     }
   }
+
+  export async function checkUser(email: string) {
+    const res = await fetch(`${baseUrl}/subscription/${email}`);
+    return res.json();
+  }

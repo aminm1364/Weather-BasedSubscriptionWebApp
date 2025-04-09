@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Settings() {
   const [baseUrl, setBaseUrl] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const stored = localStorage.getItem('apiBaseUrl');
@@ -16,6 +18,9 @@ export default function Settings() {
   return (
     <div className="page center-content">
       <div className="form-container">
+      <div className="form-nav">
+          <button className="back-link" onClick={() => navigate(-1)}>← Back</button>
+        </div>
         <h2 className="form-title">Settings</h2>
         <div className="form-group">
           <label className="form-label">API Base URL:</label>

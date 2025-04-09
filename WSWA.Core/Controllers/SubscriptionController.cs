@@ -35,6 +35,24 @@ namespace WSWA.Core.Controllers
             return CreatedAtAction(nameof(GetSubscription), new { email = subscription.Email }, subscription);
         }
 
+        [HttpPatch]
+        public async Task<IActionResult> UpdateSubscription([FromBody] Subscription subscription)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var existingSubscription = await _context.Subscriptions.FindAsync(subscription.Email.Trim().ToLower());
+            if (existingSubscription == null)
+                return BadRequest("Email address not found.");
+
+            existingSubscription.City = subscription.City;
+            existingSubscription.Country = subscription.Country;
+            existingSubscription.ZipCode = subscription.ZipCode;
+            await _context.SaveChangesAsync();
+
+            return AcceptedAtAction(nameof(GetSubscription), new { email = subscription.Email }, subscription);
+        }
+
         [HttpGet("{email}")]
         public async Task<IActionResult> GetSubscription(string email)
         {

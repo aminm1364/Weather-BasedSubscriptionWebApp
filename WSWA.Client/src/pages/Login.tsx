@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { loginUser } from '../services/api';
+import { checkUser, loginUser } from '../services/api';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
+  const [showCheckLocation, setShowCheckLocation] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -27,6 +28,14 @@ export default function Login() {
         ? res.message
         : 'Login failed. Please make sure you are subscribed.';
       setError(message);
+      if (message.includes("Unable to fetch weather data.")) 
+      {
+        const checkRes = await checkUser(email);
+        if (checkRes !== undefined) {
+          localStorage.setItem("userToUpdate", JSON.stringify(checkRes));
+          setShowCheckLocation(true);
+        }
+      }
     }
   };
 
@@ -48,6 +57,16 @@ export default function Login() {
           </div>
           <button type="submit" className="form-button">Login</button>
         </form>
+        {showCheckLocation && (
+          <button
+            type="button"
+            className="form-button"
+            onClick={() => navigate('/userinfo')}
+            style={{ marginTop: '10px' }}
+          >
+            Check the location info
+          </button>
+        )}
         <div className="form-links">
           <p>
             Don't have an account? <Link to="/register">Register here</Link>

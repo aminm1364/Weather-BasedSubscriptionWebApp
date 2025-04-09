@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { registerUser } from '../services/api';
 
 export default function Register() {
@@ -25,7 +25,7 @@ export default function Register() {
     <div className="page center-content">
       <div className="form-container">
         <div className="form-nav">
-          <Link to="/" className="back-link">← Back to Login</Link>
+          <button className="back-link" onClick={() => navigate(-1)}>← Back</button>
         </div>
         <h2 className="form-title">Register</h2>
         {error && <p className="form-error">{error}</p>}
