@@ -9,33 +9,37 @@ export default function Login() {
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    
     e.preventDefault();
     setError('');
+    setShowCheckLocation(false);
 
     const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     if (!isValidEmail) {
       setError('Please enter a valid email address.');
       return;
     }
-    const res = await loginUser(email);
-    
-    if (res?.weather) {
-      localStorage.setItem('weatherData', JSON.stringify(res));
-      navigate('/dashboard');
-    } else {
-      const message = typeof res === 'object' && res?.message
-        ? res.message
-        : 'Login failed. Please make sure you are subscribed.';
-      setError(message);
-      if (message.includes("Unable to fetch weather data.")) 
-      {
-        const checkRes = await checkUser(email);
-        if (checkRes !== undefined) {
-          localStorage.setItem("userToUpdate", JSON.stringify(checkRes));
-          setShowCheckLocation(true);
+
+    try {
+      const res = await loginUser(email);
+
+      if (res?.weather) {
+        localStorage.setItem('weatherData', JSON.stringify(res));
+        navigate('/dashboard');
+      } else {
+        const message = typeof res === 'object' && res?.message
+          ? res.message
+          : 'Login failed. Please make sure you are subscribed.';
+        setError(message);
+        if (message.includes("Unable to fetch weather data.")) {
+          const checkRes = await checkUser(email);
+          if (checkRes !== undefined) {
+            localStorage.setItem("userToUpdate", JSON.stringify(checkRes));
+            setShowCheckLocation(true);
+          }
         }
       }
+    } catch (err) {
+      setError('Something went wrong while connecting to the server. Please try again later.');
     }
   };
 
